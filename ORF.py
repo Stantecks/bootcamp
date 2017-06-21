@@ -4,6 +4,7 @@ def longest_orf(seq):
     pot_starts = []
     frame_coord = []
     long_orf = 0
+    seq = seq.upper()
     for i in range(0, len(seq)):
         if seq[i:i+3] in start_codon:
             pot_starts.append(i)
