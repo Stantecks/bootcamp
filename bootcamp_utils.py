@@ -2,6 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import bkcharts
+import bokeh.io
+import bokeh.models
+import bokeh.palettes
+import bokeh.plotting
 
 def ecdf(data, formal=False, buff=0.1, min_x=None, max_x=None):
     """
@@ -187,3 +192,27 @@ def ecdf_plot(data, value, hue=None, formal=False, buff=0.1, min_x=None, max_x=N
         ax.legend(ecdfs.index, loc=0)
 
     return ax
+
+
+def bokeh_imshow(im, color_mapper=None):
+    """
+    Display an image in a Bokeh figure.
+    """
+    # Get shape
+    n, m = im.shape
+
+    # Set up figure with appropriate dimensions
+    plot_height = 400
+    plot_width = int(m/n * plot_height)
+    p = bokeh.plotting.figure(plot_height=plot_height, plot_width=plot_width, 
+                              x_range=[0, m], y_range=[0, n],
+                              tools='pan,box_zoom,wheel_zoom,reset,resize')
+
+    # Set color mapper; we'll do Viridis with 256 levels by default
+    if color_mapper is None:
+        color_mapper = bokeh.models.LinearColorMapper(bokeh.palettes.viridis(256))
+
+    # Display the image
+    im_bokeh = p.image(image=[im], x=0, y=0, dw=m, dh=n, color_mapper=color_mapper)
+    
+    return p
